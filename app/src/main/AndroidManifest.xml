@@ -69,6 +69,7 @@
             android:screenOrientation="portrait" />
 
 
+        <receiver android:name=".services.NotificationReceiver" />
         <service android:name=".services.NotificationService" />
 
         <!--

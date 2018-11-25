@@ -1,5 +1,7 @@
 package com.holidayjournal.ui.holidays;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -18,14 +20,12 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.holidayjournal.R;
-import com.holidayjournal.services.NotificationService;
+import com.holidayjournal.services.NotificationReceiver;
 import com.holidayjournal.utils.Constants;
 import com.holidayjournal.models.HolidayModel;
 import com.holidayjournal.ui.base.BaseActivity;
 import com.holidayjournal.ui.holidays.addholiday.AddHolidayActivity;
 import com.holidayjournal.utils.Intents;
-
-import org.joda.time.DateTime;
 
 import butterknife.BindView;
 
@@ -50,7 +50,6 @@ public class HolidayActivity extends BaseActivity implements HolidayView, View.O
     private HolidayAdapter mAdapter;
     private HolidayPresenter mPresenter;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,7 +62,7 @@ public class HolidayActivity extends BaseActivity implements HolidayView, View.O
 
         registerBroadcastReceiver();
 
-        startNotificationService();
+        setNotificationAlarm(System.currentTimeMillis() + 60000);
 
         mFab.setOnClickListener(this);
 
@@ -171,14 +170,12 @@ public class HolidayActivity extends BaseActivity implements HolidayView, View.O
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mReceiver);
     }
 
-    private void startNotificationService() {
-        DateTime date = new DateTime();
-        date = date.plusDays(1);
-        long millis = date.getMillis();
+    private void setNotificationAlarm(long date) {
+        Intent intent = new Intent(this, NotificationReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        Intent notificationService = new Intent(this, NotificationService.class);
-        notificationService.putExtra("date", millis);
-        this.startService(notificationService);
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, date, pendingIntent);
     }
 
     @Override

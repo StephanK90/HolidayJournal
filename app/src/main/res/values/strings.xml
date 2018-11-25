@@ -1,0 +1,70 @@
+<resources>
+    <string name="app_name">Holiday Journal</string>
+
+    <string name="menu_share">Share</string>
+    <string name="menu_settings">Settings</string>
+    <string name="menu_log_out">Log Out</string>
+
+    <string name="login_email_hint">E-mail</string>
+    <string name="login_pw_hint">Password</string>
+    <string name="log_in">Log In</string>
+    <string name="create_account">Create Account</string>
+    <string name="create_new_account">New? Register here!</string>
+    <string name="forgot_pw">Forgot password?</string>
+    <string name="log_out_confirmation">Are you sure you want to Log Out?</string>
+
+    <string name="holidays_toolbar_title">My Holidays</string>
+    <string name="add_holiday_toolbar_title">Add Holiday</string>
+    <string name="edit_holiday_toolbar_title">Edit Holiday</string>
+    <string name="edit_day_toolbar_title">Edit Day</string>
+    <string name="maps_location_toolbar_title">Select Location</string>
+    <string name="maps_route_toolbar_title">Holiday Route</string>
+    <string name="settings_toolbar_title">Settings</string>
+
+    <string name="share">SHARE</string>
+    <string name="map">MAP</string>
+    <string name="edit">EDIT</string>
+    <string name="delete">DELETE</string>
+    <string name="save">Save</string>
+
+    <string name="title_hint">Title</string>
+    <string name="start_date_hint">Start Date</string>
+    <string name="end_date_hint">End Date</string>
+    <string name="holiday_summary_hint">Summary of your holiday…</string>
+    <string name="add_holiday">Add Holiday</string>
+    <string name="rating_hint">Rating</string>
+    <string name="location_hint">Location</string>
+    <string name="day_description_hint">Describe your day…</string>
+
+    <string name="holiday_date">%1$s - %2$s</string>
+    <string name="no_holidays_text">Start by adding a holiday.</string>
+    <string name="day_title_placeholder">Day %s</string>
+    <string name="set_location">Set Location</string>
+    <string name="delete_holiday">Delete Holiday</string>
+    <string name="delete_holiday_confirmation">Are you sure you want to delete "%s"?</string>
+    <string name="select_picture">Select a picture with…</string>
+    <string name="share_to">Share to…</string>
+
+    <string name="notification_title">Have a great Holiday!</string>
+    <string name="notification_text">Don\'t forget to log your days.</string>
+
+    <string name="pref_delete_account">pref_delete_account</string>
+    <string name="pref_delete_data">pref_delete_data</string>
+
+    <string name="delete_account">Delete Account</string>
+    <string name="delete_account_confirmation">Are you sure you want to delete your account and all saved data?</string>
+
+    <string-array name="rating_array">
+        <item>10</item>
+        <item>9</item>
+        <item>8</item>
+        <item>7</item>
+        <item>6</item>
+        <item>5</item>
+        <item>4</item>
+        <item>3</item>
+        <item>2</item>
+        <item>1</item>
+    </string-array>
+
+</resources>

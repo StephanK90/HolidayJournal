@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "200600808273",
+    "firebase_url": "https://holiday-journal.firebaseio.com",
+    "project_id": "holiday-journal",
+    "storage_bucket": "holiday-journal.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:200600808273:android:a3d07c6f9226759b",
+        "android_client_info": {
+          "package_name": "com.holidayjournal"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "200600808273-6lj0pgm9ehdk1ob5d1j68ctht8ct816a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDznJ3M4nlo0YRAi66cQ8IFFNNucoISV6g"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

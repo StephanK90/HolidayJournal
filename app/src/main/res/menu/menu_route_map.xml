@@ -1,0 +1,23 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/menu_route_map_share"
+        android:icon="@drawable/ic_share_menu"
+        android:orderInCategory="1"
+        android:title="@string/menu_share"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/menu_route_map_settings"
+        android:orderInCategory="100"
+        android:title="@string/menu_settings"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/menu_route_map_log_out"
+        android:orderInCategory="101"
+        android:title="@string/menu_log_out"
+        app:showAsAction="never" />
+
+</menu>

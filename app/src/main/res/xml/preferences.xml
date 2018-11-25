@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory
+        android:key="pref_account_settings"
+        android:title="Account Settings">
+
+        <Preference
+            android:icon="@drawable/ic_delete_forever_grey_36dp"
+            android:key="@string/pref_delete_data"
+            android:summary="Deletes all your saved data"
+            android:title="Delete Saved Data" />
+
+        <Preference
+            android:icon="@drawable/ic_person_grey"
+            android:key="@string/pref_delete_account"
+            android:summary="Deletes your account and all saved data"
+            android:title="Delete Account" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

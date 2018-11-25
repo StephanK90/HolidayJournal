@@ -5,11 +5,11 @@ import android.util.Patterns;
 
 import java.util.regex.Matcher;
 
-class LoginFragmentPresenter {
+class LoginPresenter {
 
-    private LoginFragmentView mView;
+    private LoginView mView;
 
-    LoginFragmentPresenter(LoginFragmentView view) {
+    LoginPresenter(LoginView view) {
         this.mView = view;
     }
 

@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,12 +11,11 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.holidayjournal.R;
+import com.holidayjournal.ui.base.BaseFragment;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
 
-public class LoginFragment extends Fragment implements LoginFragmentView, View.OnClickListener {
+public class LoginFragment extends BaseFragment implements LoginView, View.OnClickListener {
 
     @BindView(R.id.login_email)
     EditText mEmail;
@@ -34,23 +32,25 @@ public class LoginFragment extends Fragment implements LoginFragmentView, View.O
     @BindView(R.id.login_register_btn)
     Button mRegister;
 
-    private Unbinder unbinder;
     private LoginListener mCallback;
-    private LoginFragmentPresenter mPresenter;
+    private LoginPresenter mPresenter;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_login, container, false);
-        unbinder = ButterKnife.bind(this, view);
-        return view;
+        return super.onCreateView(inflater, container, savedInstanceState);
+    }
+
+    @Override
+    protected int getLayoutID() {
+        return R.layout.fragment_login;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mPresenter = new LoginFragmentPresenter(this);
+        mPresenter = new LoginPresenter(this);
 
         mLogin.setOnClickListener(this);
         mResetPw.setOnClickListener(this);
@@ -80,12 +80,6 @@ public class LoginFragment extends Fragment implements LoginFragmentView, View.O
     @Override
     public void onError(String message) {
         mCallback.logInError(message);
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        unbinder.unbind();
     }
 
     @Override

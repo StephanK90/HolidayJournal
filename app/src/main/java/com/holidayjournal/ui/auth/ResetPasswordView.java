@@ -1,8 +1,8 @@
 package com.holidayjournal.ui.auth;
 
-public interface LoginFragmentView {
+public interface ResetPasswordView {
 
-    void onValidateSuccess();
+    void onSuccess();
 
     void onError(String message);
 }

@@ -15,22 +15,16 @@ import com.holidayjournal.ui.base.BaseFragment;
 
 import butterknife.BindView;
 
-public class RegisterFragment extends BaseFragment implements View.OnClickListener, RegisterView {
+public class ResetPasswordFragment extends BaseFragment implements View.OnClickListener, ResetPasswordView {
 
-    @BindView(R.id.register_email)
+    @BindView(R.id.reset_pw_email)
     EditText mEmail;
 
-    @BindView(R.id.register_pw)
-    EditText mPass;
+    @BindView(R.id.reset_pw_btn)
+    Button mResetBtn;
 
-    @BindView(R.id.register_confirm_pw)
-    EditText mConfirmPw;
-
-    @BindView(R.id.register_btn)
-    Button mRegister;
-
-    private RegisterPresenter mPresenter;
-    private RegisterListener mCallback;
+    private ResetPasswordListener mCallback;
+    private ResetPasswordPresenter mPresenter;
 
     @Nullable
     @Override
@@ -40,50 +34,47 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
 
     @Override
     protected int getLayoutID() {
-        return R.layout.fragment_register;
+        return R.layout.fragment_reset_password;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mPresenter = new RegisterPresenter(this);
+        mPresenter = new ResetPasswordPresenter(this);
 
-        mRegister.setOnClickListener(this);
+        mResetBtn.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.register_btn:
-                mPresenter.validateCredentials(
-                        mEmail.getText().toString().trim(),
-                        mPass.getText().toString().trim(),
-                        mConfirmPw.getText().toString().trim());
+            case R.id.reset_pw_btn:
+                mPresenter.sendPasswordResetEmail(mEmail.getText().toString().trim());
                 break;
         }
     }
 
     @Override
-    public void onValidateSuccess(String email, String password) {
-        mCallback.registerUser(email, password);
+    public void onSuccess() {
+        mCallback.emailSent();
     }
 
     @Override
     public void onError(String message) {
-        mCallback.registerError(message);
+        mCallback.resetPasswordError(message);
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        mCallback = (RegisterListener) context;
+        mCallback = (ResetPasswordListener) context;
     }
 
-    public interface RegisterListener {
+    public interface ResetPasswordListener {
 
-        void registerUser(String email, String password);
+        void emailSent();
 
-        void registerError(String message);
+        void resetPasswordError(String message);
     }
 }

@@ -5,12 +5,14 @@
     <string name="menu_settings">Settings</string>
     <string name="menu_log_out">Log Out</string>
 
-    <string name="login_email_hint">E-mail</string>
-    <string name="login_pw_hint">Password</string>
+    <string name="email_hint">Email</string>
+    <string name="pw_hint">Password</string>
+    <string name="confirm_pw_hint">Confirm Password</string>
     <string name="log_in">Log In</string>
     <string name="create_account">Create Account</string>
     <string name="create_new_account">New? Register here!</string>
     <string name="forgot_pw">Forgot password?</string>
+    <string name="send_email">Send Password Reset Email</string>
     <string name="log_out_confirmation">Are you sure you want to Log Out?</string>
 
     <string name="holidays_toolbar_title">My Holidays</string>

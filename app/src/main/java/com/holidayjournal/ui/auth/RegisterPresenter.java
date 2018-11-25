@@ -5,15 +5,15 @@ import android.util.Patterns;
 
 import java.util.regex.Matcher;
 
-class RegisterFragmentPresenter {
+class RegisterPresenter {
 
-    private RegisterFragmentView mView;
+    private RegisterView mView;
 
-    RegisterFragmentPresenter(RegisterFragmentView view) {
+    RegisterPresenter(RegisterView view) {
         this.mView = view;
     }
 
-    void validateCredentials(String email, String password) {
+    void validateCredentials(String email, String password, String confirmPassword) {
         Matcher matcher = Patterns.EMAIL_ADDRESS.matcher(email);
 
         if (TextUtils.isEmpty(email)) {
@@ -26,6 +26,11 @@ class RegisterFragmentPresenter {
             return;
         }
 
+        if (TextUtils.isEmpty(confirmPassword)) {
+            mView.onError("Confirm password!");
+            return;
+        }
+
         if (!matcher.matches()) {
             mView.onError("Invalid email address!");
             return;
@@ -33,6 +38,11 @@ class RegisterFragmentPresenter {
 
         if (password.length() < 6) {
             mView.onError("Password requires at least 6 characters!");
+            return;
+        }
+
+        if (!confirmPassword.equals(password)) {
+            mView.onError("Passwords do not match!");
             return;
         }
 

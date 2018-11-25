@@ -1,6 +1,6 @@
 package com.holidayjournal.ui.auth;
 
-public interface RegisterFragmentView {
+public interface RegisterView {
 
     void onValidateSuccess(String email, String password);
 

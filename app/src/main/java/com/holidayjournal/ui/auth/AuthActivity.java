@@ -19,21 +19,18 @@ import com.holidayjournal.ui.holidays.HolidayActivity;
 
 import butterknife.BindView;
 
-public class NewAuthActivity extends BaseActivity implements LoginFragment.LoginListener, RegisterFragment.RegisterListener {
+public class AuthActivity extends BaseActivity implements LoginFragment.LoginListener, RegisterFragment.RegisterListener {
 
     @BindView(R.id.login_progress)
     ProgressBar mProgressBar;
 
     private FirebaseAuth mAuth;
-    private RegisterFragment registerFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         mAuth = FirebaseAuth.getInstance();
-
-        registerFragment = new RegisterFragment();
 
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.add(R.id.auth_layout, new LoginFragment());
@@ -87,7 +84,7 @@ public class NewAuthActivity extends BaseActivity implements LoginFragment.Login
     @Override
     public void startRegister() {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.auth_layout, registerFragment);
+        transaction.replace(R.id.auth_layout, new RegisterFragment());
         transaction.addToBackStack(null);
         transaction.commit();
     }

@@ -6,7 +6,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 
 import com.holidayjournal.R;
-import com.holidayjournal.ui.auth.login.LoginActivity;
+import com.holidayjournal.ui.auth.AuthActivity;
 import com.holidayjournal.ui.base.BaseActivity;
 
 import butterknife.BindView;
@@ -40,7 +40,7 @@ public class SettingsActivity extends BaseActivity implements SettingsFragment.S
     @Override
     public void redirectToLogin() {
         showToast("Account Successfully deleted.");
-        Intent intent = new Intent(this, LoginActivity.class);
+        Intent intent = new Intent(this, AuthActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
         finish();

@@ -28,16 +28,8 @@
         </activity>
 
         <activity
-            android:name=".ui.auth.NewAuthActivity"
+            android:name=".ui.auth.AuthActivity"
             android:noHistory="true"
-            android:screenOrientation="portrait" />
-
-        <activity
-            android:name=".ui.auth.login.LoginActivity"
-            android:screenOrientation="portrait" />
-
-        <activity
-            android:name=".ui.auth.register.RegisterActivity"
             android:screenOrientation="portrait" />
 
         <activity

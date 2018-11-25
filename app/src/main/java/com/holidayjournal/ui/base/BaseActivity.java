@@ -11,7 +11,7 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.holidayjournal.R;
-import com.holidayjournal.ui.auth.login.LoginActivity;
+import com.holidayjournal.ui.auth.AuthActivity;
 import com.holidayjournal.ui.settings.SettingsActivity;
 
 import butterknife.ButterKnife;
@@ -67,7 +67,7 @@ public abstract class BaseActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 FirebaseAuth.getInstance().signOut();
 
-                Intent intent = new Intent(BaseActivity.this, LoginActivity.class);
+                Intent intent = new Intent(BaseActivity.this, AuthActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
                 finish();

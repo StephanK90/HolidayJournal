@@ -2,7 +2,7 @@ package com.holidayjournal.ui.auth;
 
 public interface LoginView {
 
-    void onValidateSuccess();
+    void onLogInSuccess();
 
     void onError(String message);
 }

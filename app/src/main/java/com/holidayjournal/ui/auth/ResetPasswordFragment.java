@@ -7,8 +7,10 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 
 import com.holidayjournal.R;
 import com.holidayjournal.ui.base.BaseFragment;
@@ -16,6 +18,9 @@ import com.holidayjournal.ui.base.BaseFragment;
 import butterknife.BindView;
 
 public class ResetPasswordFragment extends BaseFragment implements View.OnClickListener, ResetPasswordView {
+
+    @BindView(R.id.reset_pw_progress)
+    ProgressBar mProgressBar;
 
     @BindView(R.id.reset_pw_email)
     EditText mEmail;
@@ -50,6 +55,7 @@ public class ResetPasswordFragment extends BaseFragment implements View.OnClickL
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.reset_pw_btn:
+                showProgressBar();
                 mPresenter.sendPasswordResetEmail(mEmail.getText().toString().trim());
                 break;
         }
@@ -57,12 +63,33 @@ public class ResetPasswordFragment extends BaseFragment implements View.OnClickL
 
     @Override
     public void onSuccess() {
+        hideProgressBar();
         mCallback.emailSent();
     }
 
     @Override
     public void onError(String message) {
+        hideProgressBar();
         mCallback.resetPasswordError(message);
+    }
+
+    private void showProgressBar() {
+        if (!mProgressBar.isShown()) {
+            if (getActivity() != null) {
+                getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                        WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+            }
+            mProgressBar.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void hideProgressBar() {
+        if (mProgressBar.isShown()) {
+            if (getActivity() != null) {
+                getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+            }
+            mProgressBar.setVisibility(View.GONE);
+        }
     }
 
     @Override

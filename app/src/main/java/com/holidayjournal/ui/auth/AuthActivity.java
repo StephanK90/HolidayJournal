@@ -2,36 +2,16 @@ package com.holidayjournal.ui.auth;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.view.View;
-import android.view.WindowManager;
-import android.widget.ProgressBar;
 
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthCredential;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.GoogleAuthProvider;
 import com.holidayjournal.R;
 import com.holidayjournal.ui.base.BaseActivity;
 import com.holidayjournal.ui.holidays.HolidayActivity;
-import com.holidayjournal.utils.Utils;
-
-import butterknife.BindView;
 
 public class AuthActivity extends BaseActivity implements LoginFragment.LoginListener, RegisterFragment.RegisterListener, ResetPasswordFragment.ResetPasswordListener {
-
-    @BindView(R.id.login_progress)
-    ProgressBar mProgressBar;
-
-    private final int RC_SIGN_IN = 0;
 
     private FirebaseAuth mAuth;
 
@@ -57,98 +37,29 @@ public class AuthActivity extends BaseActivity implements LoginFragment.LoginLis
 
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null) {
-            loginSuccessful();
+            onLogIn();
         }
     }
 
     @Override
-    public void logIn(String email, String pw) {
-        showProgressBar();
-        mAuth.signInWithEmailAndPassword(email, pw)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            loginSuccessful();
-                        } else {
-                            onError("Invalid credentials.");
-                        }
-                    }
-                });
-    }
-
-    private void loginSuccessful() {
+    public void onLogIn() {
         showToast("Authentication successful!");
-        hideProgressBar();
-
         startHolidayActivity();
     }
 
     @Override
-    public void logInError(String message) {
+    public void onLogInError(String message) {
         showToast(message);
     }
 
     @Override
-    public void googleSignIn() {
-        Intent signInIntent = Utils.getGoogleSignInClient(this).getSignInIntent();
-        startActivityForResult(signInIntent, RC_SIGN_IN);
-    }
-
-    private void onGoogleSignInResult(Task<GoogleSignInAccount> completedTask) {
-        showProgressBar();
-        try {
-            GoogleSignInAccount account = completedTask.getResult(ApiException.class);
-            if (account != null) {
-                firebaseAuthWithGoogle(account);
-            }
-        } catch (ApiException e) {
-            e.printStackTrace();
-            onError("Failed to sign in with Google.");
-        }
-    }
-
-    private void firebaseAuthWithGoogle(GoogleSignInAccount account) {
-        AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
-        mAuth.signInWithCredential(credential)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            loginSuccessful();
-                        } else {
-                            onError("Failed to authenticate with Google.");
-                        }
-                    }
-                });
-    }
-
-    @Override
     public void startRegister() {
-        openFragment(new RegisterFragment());
+        openNewFragment(new RegisterFragment());
     }
 
     @Override
-    public void registerUser(String email, String password) {
-        showProgressBar();
-        mAuth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            registerSuccessful();
-
-                        } else {
-                            onError("Failed to register");
-                        }
-                    }
-                });
-    }
-
-    private void registerSuccessful() {
+    public void onUserRegistered() {
         showToast("Register successful!");
-        hideProgressBar();
-
         startHolidayActivity();
     }
 
@@ -159,7 +70,7 @@ public class AuthActivity extends BaseActivity implements LoginFragment.LoginLis
 
     @Override
     public void startResetPassword() {
-        openFragment(new ResetPasswordFragment());
+        openNewFragment(new ResetPasswordFragment());
     }
 
     @Override
@@ -173,12 +84,7 @@ public class AuthActivity extends BaseActivity implements LoginFragment.LoginLis
         onBackPressed();
     }
 
-    private void onError(String message) {
-        showToast(message);
-        hideProgressBar();
-    }
-
-    private void openFragment(Fragment fragment) {
+    private void openNewFragment(Fragment fragment) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.auth_layout, fragment);
         transaction.addToBackStack(null);
@@ -190,32 +96,6 @@ public class AuthActivity extends BaseActivity implements LoginFragment.LoginLis
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
         finish();
-    }
-
-    private void showProgressBar() {
-        if (!mProgressBar.isShown()) {
-            getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-                    WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-
-            mProgressBar.setVisibility(View.VISIBLE);
-        }
-    }
-
-    private void hideProgressBar() {
-        if (mProgressBar.isShown()) {
-            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-            mProgressBar.setVisibility(View.GONE);
-        }
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == RESULT_OK) {
-            if (requestCode == RC_SIGN_IN) {
-                Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-                onGoogleSignInResult(task);
-            }
-        }
     }
 
 }

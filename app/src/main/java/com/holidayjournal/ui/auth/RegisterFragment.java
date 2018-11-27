@@ -7,8 +7,10 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 
 import com.holidayjournal.R;
 import com.holidayjournal.ui.base.BaseFragment;
@@ -16,6 +18,9 @@ import com.holidayjournal.ui.base.BaseFragment;
 import butterknife.BindView;
 
 public class RegisterFragment extends BaseFragment implements View.OnClickListener, RegisterView {
+
+    @BindView(R.id.register_progress)
+    ProgressBar mProgressBar;
 
     @BindView(R.id.register_email)
     EditText mEmail;
@@ -56,7 +61,8 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.register_btn:
-                mPresenter.validateCredentials(
+                showProgressBar();
+                mPresenter.registerUser(
                         mEmail.getText().toString().trim(),
                         mPass.getText().toString().trim(),
                         mConfirmPw.getText().toString().trim());
@@ -65,13 +71,34 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
     }
 
     @Override
-    public void onValidateSuccess(String email, String password) {
-        mCallback.registerUser(email, password);
+    public void onRegisterSuccess() {
+        hideProgressBar();
+        mCallback.onUserRegistered();
     }
 
     @Override
     public void onError(String message) {
+        hideProgressBar();
         mCallback.registerError(message);
+    }
+
+    private void showProgressBar() {
+        if (!mProgressBar.isShown()) {
+            if (getActivity() != null) {
+                getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                        WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+            }
+            mProgressBar.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void hideProgressBar() {
+        if (mProgressBar.isShown()) {
+            if (getActivity() != null) {
+                getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+            }
+            mProgressBar.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -82,7 +109,7 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
 
     public interface RegisterListener {
 
-        void registerUser(String email, String password);
+        void onUserRegistered();
 
         void registerError(String message);
     }

@@ -9,14 +9,20 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.ProgressBar;
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GoogleAuthProvider;
 import com.holidayjournal.R;
 import com.holidayjournal.ui.base.BaseActivity;
 import com.holidayjournal.ui.holidays.HolidayActivity;
+import com.holidayjournal.utils.Utils;
 
 import butterknife.BindView;
 
@@ -24,6 +30,8 @@ public class AuthActivity extends BaseActivity implements LoginFragment.LoginLis
 
     @BindView(R.id.login_progress)
     ProgressBar mProgressBar;
+
+    private final int RC_SIGN_IN = 0;
 
     private FirebaseAuth mAuth;
 
@@ -63,23 +71,56 @@ public class AuthActivity extends BaseActivity implements LoginFragment.LoginLis
                         if (task.isSuccessful()) {
                             loginSuccessful();
                         } else {
-                            showToast("Invalid credentials.");
+                            onError("Invalid credentials.");
                         }
-                        hideProgressBar();
                     }
                 });
     }
 
     private void loginSuccessful() {
         showToast("Authentication successful!");
-        Intent intent = new Intent(this, HolidayActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
+        hideProgressBar();
+
+        startHolidayActivity();
     }
 
     @Override
     public void logInError(String message) {
         showToast(message);
+    }
+
+    @Override
+    public void googleSignIn() {
+        Intent signInIntent = Utils.getGoogleSignInClient(this).getSignInIntent();
+        startActivityForResult(signInIntent, RC_SIGN_IN);
+    }
+
+    private void onGoogleSignInResult(Task<GoogleSignInAccount> completedTask) {
+        showProgressBar();
+        try {
+            GoogleSignInAccount account = completedTask.getResult(ApiException.class);
+            if (account != null) {
+                firebaseAuthWithGoogle(account);
+            }
+        } catch (ApiException e) {
+            e.printStackTrace();
+            onError("Failed to sign in with Google.");
+        }
+    }
+
+    private void firebaseAuthWithGoogle(GoogleSignInAccount account) {
+        AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
+        mAuth.signInWithCredential(credential)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            loginSuccessful();
+                        } else {
+                            onError("Failed to authenticate with Google.");
+                        }
+                    }
+                });
     }
 
     @Override
@@ -89,6 +130,7 @@ public class AuthActivity extends BaseActivity implements LoginFragment.LoginLis
 
     @Override
     public void registerUser(String email, String password) {
+        showProgressBar();
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -97,7 +139,7 @@ public class AuthActivity extends BaseActivity implements LoginFragment.LoginLis
                             registerSuccessful();
 
                         } else {
-                            showToast("Failed to register.");
+                            onError("Failed to register");
                         }
                     }
                 });
@@ -105,10 +147,9 @@ public class AuthActivity extends BaseActivity implements LoginFragment.LoginLis
 
     private void registerSuccessful() {
         showToast("Register successful!");
-        Intent intent = new Intent(this, HolidayActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
-        finish();
+        hideProgressBar();
+
+        startHolidayActivity();
     }
 
     @Override
@@ -122,14 +163,19 @@ public class AuthActivity extends BaseActivity implements LoginFragment.LoginLis
     }
 
     @Override
+    public void resetPasswordError(String message) {
+        showToast(message);
+    }
+
+    @Override
     public void emailSent() {
         showToast("Email has been sent!");
         onBackPressed();
     }
 
-    @Override
-    public void resetPasswordError(String message) {
+    private void onError(String message) {
         showToast(message);
+        hideProgressBar();
     }
 
     private void openFragment(Fragment fragment) {
@@ -137,6 +183,13 @@ public class AuthActivity extends BaseActivity implements LoginFragment.LoginLis
         transaction.replace(R.id.auth_layout, fragment);
         transaction.addToBackStack(null);
         transaction.commit();
+    }
+
+    private void startHolidayActivity() {
+        Intent intent = new Intent(this, HolidayActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+        finish();
     }
 
     private void showProgressBar() {
@@ -152,6 +205,16 @@ public class AuthActivity extends BaseActivity implements LoginFragment.LoginLis
         if (mProgressBar.isShown()) {
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
             mProgressBar.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK) {
+            if (requestCode == RC_SIGN_IN) {
+                Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+                onGoogleSignInResult(task);
+            }
         }
     }
 

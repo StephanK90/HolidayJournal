@@ -11,7 +11,8 @@
     <ImageView
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_marginBottom="30dp"
+        android:layout_marginTop="25dp"
+        android:layout_marginBottom="25dp"
         android:src="@drawable/splash_logo" />
 
     <android.support.design.widget.TextInputLayout
@@ -22,7 +23,7 @@
             android:id="@+id/login_email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
+            android:layout_marginBottom="16dp"
             android:hint="@string/email_hint"
             android:imeOptions="actionNext"
             android:inputType="textEmailAddress"
@@ -53,17 +54,24 @@
         style="?android:attr/borderlessButtonStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="20dp"
         android:background="@drawable/button_round_corners"
         android:text="@string/log_in"
-        android:textSize="14sp"
+        android:textAllCaps="false"
+        android:textSize="15sp"
         android:textStyle="bold" />
+
+    <com.google.android.gms.common.SignInButton
+        android:id="@+id/google_sign_in_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp" />
 
     <Button
         android:id="@+id/login_pw_reset_btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="16dp"
         android:background="@null"
         android:text="@string/forgot_pw"
         android:textAllCaps="false" />
@@ -72,10 +80,9 @@
         android:id="@+id/login_register_btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="16dp"
         android:background="@null"
         android:text="@string/create_new_account"
-        android:textAllCaps="false"
-        android:textSize="15sp" />
+        android:textAllCaps="false" />
 
 </LinearLayout>

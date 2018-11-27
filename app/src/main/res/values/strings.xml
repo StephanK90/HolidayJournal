@@ -1,4 +1,6 @@
 <resources>
+    <string name="google_web_client_id">200600808273-6lj0pgm9ehdk1ob5d1j68ctht8ct816a.apps.googleusercontent.com</string>
+
     <string name="app_name">Holiday Journal</string>
 
     <string name="menu_share">Share</string>
@@ -53,6 +55,8 @@
     <string name="pref_delete_account">pref_delete_account</string>
     <string name="pref_delete_data">pref_delete_data</string>
 
+    <string name="delete_data">Delete all saved data</string>
+    <string name="delete_data_confirmation">Are you sure you want to delete all saved data?</string>
     <string name="delete_account">Delete Account</string>
     <string name="delete_account_confirmation">Are you sure you want to delete your account and all saved data?</string>
 

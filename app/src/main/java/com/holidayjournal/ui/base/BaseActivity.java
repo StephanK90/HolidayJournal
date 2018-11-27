@@ -3,16 +3,20 @@ package com.holidayjournal.ui.base;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.holidayjournal.R;
 import com.holidayjournal.ui.auth.AuthActivity;
 import com.holidayjournal.ui.settings.SettingsActivity;
+import com.holidayjournal.utils.Utils;
 
 import butterknife.ButterKnife;
 
@@ -65,12 +69,11 @@ public abstract class BaseActivity extends AppCompatActivity {
         dialog.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                FirebaseAuth.getInstance().signOut();
-
-                Intent intent = new Intent(BaseActivity.this, AuthActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
-                finish();
+                if (Utils.isGoogleAccount(BaseActivity.this)) {
+                    signOutGoogleAccount();
+                } else {
+                    logOut();
+                }
             }
         });
 
@@ -82,6 +85,25 @@ public abstract class BaseActivity extends AppCompatActivity {
         });
 
         dialog.show();
+    }
+
+    private void logOut() {
+        FirebaseAuth.getInstance().signOut();
+
+        Intent intent = new Intent(BaseActivity.this, AuthActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+        finish();
+    }
+
+    private void signOutGoogleAccount() {
+        Utils.getGoogleSignInClient(this).signOut()
+                .addOnCompleteListener(this, new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        logOut();
+                    }
+                });
     }
 
     protected void showToast(String message) {

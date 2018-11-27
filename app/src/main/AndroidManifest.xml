@@ -29,7 +29,6 @@
 
         <activity
             android:name=".ui.auth.AuthActivity"
-            android:noHistory="true"
             android:screenOrientation="portrait" />
 
         <activity

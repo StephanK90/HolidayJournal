@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/colorSecondary">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/settings_app_bar"
@@ -16,11 +17,24 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <fragment
-        android:id="@+id/settings_fragment"
-        android:name="com.holidayjournal.ui.settings.SettingsFragment"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/settings_app_bar" />
+        android:layout_below="@id/settings_app_bar">
+
+        <fragment
+            android:id="@+id/settings_fragment"
+            android:name="com.holidayjournal.ui.settings.SettingsFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <ProgressBar
+            android:id="@+id/settings_progress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="gone" />
+
+    </FrameLayout>
 
 </RelativeLayout>

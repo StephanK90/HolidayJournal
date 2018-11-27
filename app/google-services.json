@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "200600808273-iq3tqhjvsgb26a3404epaf8hi8t22iaa.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.holidayjournal",
+            "certificate_hash": "93b58576eba896ca3b81282ee1042ed3bae1bcce"
+          }
+        },
+        {
           "client_id": "200600808273-6lj0pgm9ehdk1ob5d1j68ctht8ct816a.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -29,8 +37,13 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "200600808273-6lj0pgm9ehdk1ob5d1j68ctht8ct816a.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         },
         "ads_service": {
           "status": 2

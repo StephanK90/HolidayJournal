@@ -9,25 +9,30 @@ import android.support.v7.preference.Preference;
 
 import com.holidayjournal.R;
 
-public class SettingsFragment extends PreferenceFragment implements SettingsView {
+public class SettingsFragment extends PreferenceFragment {
 
     private SettingsFragmentListener mCallback;
-    private SettingsFragmentPresenter mPresenter;
 
     @Override
     public void onCreatePreferences(Bundle bundle, String s) {
         addPreferencesFromResource(R.xml.preferences);
 
-        mPresenter = new SettingsFragmentPresenter(this);
+        deleteDataPref();
+        deleteUserPref();
+    }
 
+    private void deleteDataPref() {
         Preference delete_data_btn = findPreference(getActivity().getString(R.string.pref_delete_data));
         delete_data_btn.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
+                showDeleteDataDialog();
                 return true;
             }
         });
+    }
 
+    private void deleteUserPref() {
         Preference delete_account_btn = findPreference(getActivity().getString(R.string.pref_delete_account));
         delete_account_btn.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
@@ -38,6 +43,28 @@ public class SettingsFragment extends PreferenceFragment implements SettingsView
         });
     }
 
+    private void showDeleteDataDialog() {
+        AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
+        dialog.setTitle(getString(R.string.delete_data));
+        dialog.setMessage(getString(R.string.delete_data_confirmation));
+
+        dialog.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                mCallback.onDeleteData();
+            }
+        });
+
+        dialog.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
+    }
+
     private void showDeleteAccountDialog() {
         AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
         dialog.setTitle(getString(R.string.delete_account));
@@ -46,7 +73,7 @@ public class SettingsFragment extends PreferenceFragment implements SettingsView
         dialog.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                mPresenter.deleteUserAccount();
+                mCallback.onDeleteAccount();
             }
         });
 
@@ -61,22 +88,15 @@ public class SettingsFragment extends PreferenceFragment implements SettingsView
     }
 
     @Override
-    public void onDataDeleted() {
-
-    }
-
-    @Override
-    public void onAccountDeleted() {
-        mCallback.redirectToLogin();
-    }
-
-    @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         mCallback = (SettingsFragmentListener) activity;
     }
 
     public interface SettingsFragmentListener {
-        void redirectToLogin();
+
+        void onDeleteData();
+
+        void onDeleteAccount();
     }
 }

@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.google.android.gms.common.SignInButton;
 import com.holidayjournal.R;
 import com.holidayjournal.ui.base.BaseFragment;
 
@@ -25,6 +26,9 @@ public class LoginFragment extends BaseFragment implements LoginView, View.OnCli
 
     @BindView(R.id.login_btn)
     Button mLogin;
+
+    @BindView(R.id.google_sign_in_btn)
+    SignInButton mGoogleSignInBtn;
 
     @BindView(R.id.login_pw_reset_btn)
     Button mResetPw;
@@ -55,6 +59,8 @@ public class LoginFragment extends BaseFragment implements LoginView, View.OnCli
         mLogin.setOnClickListener(this);
         mResetPw.setOnClickListener(this);
         mRegister.setOnClickListener(this);
+        mGoogleSignInBtn.setSize(SignInButton.SIZE_WIDE);
+        mGoogleSignInBtn.setOnClickListener(this);
     }
 
     @Override
@@ -62,6 +68,9 @@ public class LoginFragment extends BaseFragment implements LoginView, View.OnCli
         switch (v.getId()) {
             case R.id.login_btn:
                 mPresenter.validateCredentials(mEmail.getText().toString().trim(), mPassword.getText().toString().trim());
+                break;
+            case R.id.google_sign_in_btn:
+                mCallback.googleSignIn();
                 break;
             case R.id.login_pw_reset_btn:
                 mCallback.startResetPassword();
@@ -91,6 +100,8 @@ public class LoginFragment extends BaseFragment implements LoginView, View.OnCli
     public interface LoginListener {
 
         void logIn(String email, String password);
+
+        void googleSignIn();
 
         void logInError(String message);
 

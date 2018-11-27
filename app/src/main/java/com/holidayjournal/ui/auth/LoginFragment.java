@@ -12,11 +12,11 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.tasks.Task;
 import com.holidayjournal.R;
 import com.holidayjournal.ui.base.BaseFragment;
@@ -41,7 +41,7 @@ public class LoginFragment extends BaseFragment implements LoginView, View.OnCli
     Button mLogin;
 
     @BindView(R.id.google_sign_in_btn)
-    SignInButton mGoogleSignInBtn;
+    LinearLayout mGoogleSignInBtn;
 
     @BindView(R.id.login_pw_reset_btn)
     Button mResetPw;
@@ -73,7 +73,6 @@ public class LoginFragment extends BaseFragment implements LoginView, View.OnCli
         mLogin.setOnClickListener(this);
         mResetPw.setOnClickListener(this);
         mRegister.setOnClickListener(this);
-        mGoogleSignInBtn.setSize(SignInButton.SIZE_WIDE);
         mGoogleSignInBtn.setOnClickListener(this);
     }
 

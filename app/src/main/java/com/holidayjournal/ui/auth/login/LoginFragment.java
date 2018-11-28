@@ -1,4 +1,4 @@
-package com.holidayjournal.ui.auth;
+package com.holidayjournal.ui.auth.login;
 
 import android.app.Activity;
 import android.content.Context;

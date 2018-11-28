@@ -8,6 +8,10 @@ import android.support.v4.app.FragmentTransaction;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.holidayjournal.R;
+import com.holidayjournal.ui.auth.email.EmailLoginFragment;
+import com.holidayjournal.ui.auth.login.LoginFragment;
+import com.holidayjournal.ui.auth.register.RegisterFragment;
+import com.holidayjournal.ui.auth.resetpassword.ResetPasswordFragment;
 import com.holidayjournal.ui.base.BaseActivity;
 import com.holidayjournal.ui.holidays.HolidayActivity;
 

@@ -1,4 +1,4 @@
-package com.holidayjournal.ui.auth;
+package com.holidayjournal.ui.auth.register;
 
 public interface RegisterView {
 

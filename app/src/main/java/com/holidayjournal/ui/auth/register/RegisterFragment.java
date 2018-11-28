@@ -1,4 +1,4 @@
-package com.holidayjournal.ui.auth;
+package com.holidayjournal.ui.auth.register;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -17,25 +17,25 @@ import com.holidayjournal.ui.base.BaseFragment;
 
 import butterknife.BindView;
 
-public class EmailLoginFragment extends BaseFragment implements EmailLoginView, View.OnClickListener {
+public class RegisterFragment extends BaseFragment implements View.OnClickListener, RegisterView {
 
-    @BindView(R.id.email_login_progress)
+    @BindView(R.id.register_progress)
     ProgressBar mProgressBar;
 
-    @BindView(R.id.login_email)
+    @BindView(R.id.register_email)
     EditText mEmail;
 
-    @BindView(R.id.login_pw)
-    EditText mPassword;
+    @BindView(R.id.register_pw)
+    EditText mPass;
 
-    @BindView(R.id.login_btn)
-    Button mLogin;
+    @BindView(R.id.register_confirm_pw)
+    EditText mConfirmPw;
 
-    @BindView(R.id.login_pw_reset_btn)
-    Button mResetPw;
+    @BindView(R.id.register_btn)
+    Button mRegister;
 
-    private EmailLoginListener mCallback;
-    private EmailLoginPresenter mPresenter;
+    private RegisterPresenter mPresenter;
+    private RegisterListener mCallback;
 
     @Nullable
     @Override
@@ -45,42 +45,41 @@ public class EmailLoginFragment extends BaseFragment implements EmailLoginView, 
 
     @Override
     protected int getLayoutID() {
-        return R.layout.fragment_email_login;
+        return R.layout.fragment_register;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mPresenter = new EmailLoginPresenter(this);
+        mPresenter = new RegisterPresenter(this);
 
-        mLogin.setOnClickListener(this);
-        mResetPw.setOnClickListener(this);
+        mRegister.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.login_btn:
+            case R.id.register_btn:
                 showProgressBar();
-                mPresenter.logIn(mEmail.getText().toString().trim(), mPassword.getText().toString().trim());
-                break;
-            case R.id.login_pw_reset_btn:
-                mCallback.startResetPassword();
+                mPresenter.registerUser(
+                        mEmail.getText().toString().trim(),
+                        mPass.getText().toString().trim(),
+                        mConfirmPw.getText().toString().trim());
                 break;
         }
     }
 
     @Override
-    public void onLogInSuccess() {
+    public void onRegisterSuccess() {
         hideProgressBar();
-        mCallback.onEmailLogIn();
+        mCallback.onUserRegistered();
     }
 
     @Override
     public void onError(String message) {
         hideProgressBar();
-        mCallback.onEmailLogInError(message);
+        mCallback.OnUserRegisterError(message);
     }
 
     private void showProgressBar() {
@@ -105,15 +104,13 @@ public class EmailLoginFragment extends BaseFragment implements EmailLoginView, 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        mCallback = (EmailLoginListener) context;
+        mCallback = (RegisterListener) context;
     }
 
-    public interface EmailLoginListener {
+    public interface RegisterListener {
 
-        void onEmailLogIn();
+        void onUserRegistered();
 
-        void onEmailLogInError(String message);
-
-        void startResetPassword();
+        void OnUserRegisterError(String message);
     }
 }

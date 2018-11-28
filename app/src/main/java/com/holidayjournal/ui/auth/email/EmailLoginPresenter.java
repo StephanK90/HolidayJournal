@@ -1,4 +1,4 @@
-package com.holidayjournal.ui.auth;
+package com.holidayjournal.ui.auth.email;
 
 import android.support.annotation.NonNull;
 import android.text.TextUtils;

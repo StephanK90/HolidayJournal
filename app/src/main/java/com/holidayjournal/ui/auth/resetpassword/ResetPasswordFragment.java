@@ -1,4 +1,4 @@
-package com.holidayjournal.ui.auth;
+package com.holidayjournal.ui.auth.resetpassword;
 
 import android.content.Context;
 import android.os.Bundle;

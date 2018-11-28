@@ -3,6 +3,7 @@ package com.holidayjournal.ui.maps;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -21,6 +22,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.holidayjournal.R;
@@ -75,6 +77,7 @@ public class LocationActivity extends BaseActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+        addMapStyle();
 
         if (getIntent().getParcelableExtra(Constants.LOCATION) != null) {
             zoomToSelectedLocation();
@@ -82,22 +85,38 @@ public class LocationActivity extends BaseActivity implements OnMapReadyCallback
             verifyUserLocationPermission();
         }
 
-        Geocoder geoCoder = new Geocoder(this, Locale.getDefault());
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
             public void onMapClick(LatLng latLng) {
                 mMap.clear();
                 address = null;
-                try {
-                    List<Address> locations = geoCoder.getFromLocation(latLng.latitude, latLng.longitude, 1);
-                    address = locations.get(0);
-                    mMap.addMarker(new MarkerOptions().position(latLng).title(address.getLocality())).showInfoWindow();
-                    mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+
+                addMarker(latLng);
             }
         });
+    }
+
+    private void addMapStyle() {
+        try {
+            boolean success = mMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.map_style));
+            if (!success) {
+                showToast("Failed to apply style.");
+            }
+        } catch (Resources.NotFoundException e) {
+            showToast("No style resource found.");
+        }
+    }
+
+    private void addMarker(LatLng latLng) {
+        try {
+            Geocoder geoCoder = new Geocoder(this, Locale.getDefault());
+            List<Address> locations = geoCoder.getFromLocation(latLng.latitude, latLng.longitude, 1);
+            address = locations.get(0);
+            mMap.addMarker(new MarkerOptions().position(latLng).title(address.getLocality())).showInfoWindow();
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void zoomToSelectedLocation() {

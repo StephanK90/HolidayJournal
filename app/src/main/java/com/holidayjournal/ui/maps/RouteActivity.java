@@ -3,6 +3,7 @@ package com.holidayjournal.ui.maps;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
@@ -20,6 +21,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.holidayjournal.R;
@@ -86,6 +88,7 @@ public class RouteActivity extends BaseActivity implements OnMapReadyCallback {
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+        addMapStyle();
 
         if (holiday != null) {
             for (int i = 0; i < holiday.getDays().size(); i++) {
@@ -94,16 +97,27 @@ public class RouteActivity extends BaseActivity implements OnMapReadyCallback {
                     addMarker(firstLocation);
 
                     if ((i != (holiday.getDays().size() - 1)) && holiday.getDays().get(i + 1).getLocation() != null) {
-                        LocationModel secondLocation = holiday.getDays().get(i + 1).getLocation();
+                        LocationModel nextLocation = holiday.getDays().get(i + 1).getLocation();
                         LatLng first = new LatLng(firstLocation.getLatitude(), firstLocation.getLongitude());
-                        LatLng second = new LatLng(secondLocation.getLatitude(), secondLocation.getLongitude());
-                        drawLine(first, second);
+                        LatLng next = new LatLng(nextLocation.getLatitude(), nextLocation.getLongitude());
+                        drawLine(first, next);
                     }
                 }
             }
             if (holiday.getDays().get(0).getLocation() != null) {
                 zoomToFirstLocation(holiday.getDays().get(0).getLocation());
             }
+        }
+    }
+
+    private void addMapStyle() {
+        try {
+            boolean success = mMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.map_style));
+            if (!success) {
+                showToast("Failed to apply style.");
+            }
+        } catch (Resources.NotFoundException e) {
+            showToast("No style resource found.");
         }
     }
 

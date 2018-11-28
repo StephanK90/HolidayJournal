@@ -1,8 +1,8 @@
 package com.holidayjournal.ui.auth;
 
-public interface LoginView {
+public interface EmailLoginView {
 
-    void onGoogleLogInSuccess();
+    void onLogInSuccess();
 
     void onError(String message);
 }

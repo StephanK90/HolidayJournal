@@ -17,25 +17,25 @@ import com.holidayjournal.ui.base.BaseFragment;
 
 import butterknife.BindView;
 
-public class RegisterFragment extends BaseFragment implements View.OnClickListener, RegisterView {
+public class EmailLoginFragment extends BaseFragment implements EmailLoginView, View.OnClickListener {
 
-    @BindView(R.id.register_progress)
+    @BindView(R.id.email_login_progress)
     ProgressBar mProgressBar;
 
-    @BindView(R.id.register_email)
+    @BindView(R.id.login_email)
     EditText mEmail;
 
-    @BindView(R.id.register_pw)
-    EditText mPass;
+    @BindView(R.id.login_pw)
+    EditText mPassword;
 
-    @BindView(R.id.register_confirm_pw)
-    EditText mConfirmPw;
+    @BindView(R.id.login_btn)
+    Button mLogin;
 
-    @BindView(R.id.register_btn)
-    Button mRegister;
+    @BindView(R.id.login_pw_reset_btn)
+    Button mResetPw;
 
-    private RegisterPresenter mPresenter;
-    private RegisterListener mCallback;
+    private EmailLoginListener mCallback;
+    private EmailLoginPresenter mPresenter;
 
     @Nullable
     @Override
@@ -45,41 +45,42 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
 
     @Override
     protected int getLayoutID() {
-        return R.layout.fragment_register;
+        return R.layout.fragment_email_login;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mPresenter = new RegisterPresenter(this);
+        mPresenter = new EmailLoginPresenter(this);
 
-        mRegister.setOnClickListener(this);
+        mLogin.setOnClickListener(this);
+        mResetPw.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.register_btn:
+            case R.id.login_btn:
                 showProgressBar();
-                mPresenter.registerUser(
-                        mEmail.getText().toString().trim(),
-                        mPass.getText().toString().trim(),
-                        mConfirmPw.getText().toString().trim());
+                mPresenter.logIn(mEmail.getText().toString().trim(), mPassword.getText().toString().trim());
+                break;
+            case R.id.login_pw_reset_btn:
+                mCallback.startResetPassword();
                 break;
         }
     }
 
     @Override
-    public void onRegisterSuccess() {
+    public void onLogInSuccess() {
         hideProgressBar();
-        mCallback.onUserRegistered();
+        mCallback.onEmailLogIn();
     }
 
     @Override
     public void onError(String message) {
         hideProgressBar();
-        mCallback.OnUserRegisterError(message);
+        mCallback.onEmailLogInError(message);
     }
 
     private void showProgressBar() {
@@ -104,13 +105,15 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        mCallback = (RegisterListener) context;
+        mCallback = (EmailLoginListener) context;
     }
 
-    public interface RegisterListener {
+    public interface EmailLoginListener {
 
-        void onUserRegistered();
+        void onEmailLogIn();
 
-        void OnUserRegisterError(String message);
+        void onEmailLogInError(String message);
+
+        void startResetPassword();
     }
 }

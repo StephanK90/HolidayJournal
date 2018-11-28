@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
@@ -31,20 +30,11 @@ public class LoginFragment extends BaseFragment implements LoginView, View.OnCli
     @BindView(R.id.login_progress)
     ProgressBar mProgressBar;
 
-    @BindView(R.id.login_email)
-    EditText mEmail;
-
-    @BindView(R.id.login_pw)
-    EditText mPassword;
-
-    @BindView(R.id.login_btn)
-    Button mLogin;
+    @BindView(R.id.email_login_btn)
+    Button mEmailLogIn;
 
     @BindView(R.id.google_sign_in_btn)
     LinearLayout mGoogleSignInBtn;
-
-    @BindView(R.id.login_pw_reset_btn)
-    Button mResetPw;
 
     @BindView(R.id.login_register_btn)
     Button mRegister;
@@ -70,24 +60,19 @@ public class LoginFragment extends BaseFragment implements LoginView, View.OnCli
 
         mPresenter = new LoginPresenter(this);
 
-        mLogin.setOnClickListener(this);
-        mResetPw.setOnClickListener(this);
-        mRegister.setOnClickListener(this);
+        mEmailLogIn.setOnClickListener(this);
         mGoogleSignInBtn.setOnClickListener(this);
+        mRegister.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.login_btn:
-                showProgressBar();
-                mPresenter.logIn(mEmail.getText().toString().trim(), mPassword.getText().toString().trim());
+            case R.id.email_login_btn:
+                mCallback.startEmailLogIn();
                 break;
             case R.id.google_sign_in_btn:
                 signInWithGoogle();
-                break;
-            case R.id.login_pw_reset_btn:
-                mCallback.startResetPassword();
                 break;
             case R.id.login_register_btn:
                 mCallback.startRegister();
@@ -101,15 +86,15 @@ public class LoginFragment extends BaseFragment implements LoginView, View.OnCli
     }
 
     @Override
-    public void onLogInSuccess() {
+    public void onGoogleLogInSuccess() {
         hideProgressBar();
-        mCallback.onLogIn();
+        mCallback.onGoogleLogIn();
     }
 
     @Override
     public void onError(String message) {
         hideProgressBar();
-        mCallback.onLogInError(message);
+        mCallback.onGoogleLogInError(message);
     }
 
     private void showProgressBar() {
@@ -151,11 +136,11 @@ public class LoginFragment extends BaseFragment implements LoginView, View.OnCli
 
     public interface LoginListener {
 
-        void onLogIn();
+        void onGoogleLogIn();
 
-        void onLogInError(String message);
+        void onGoogleLogInError(String message);
 
-        void startResetPassword();
+        void startEmailLogIn();
 
         void startRegister();
     }

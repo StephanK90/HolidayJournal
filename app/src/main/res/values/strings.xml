@@ -11,6 +11,7 @@
     <string name="pw_hint">Password</string>
     <string name="confirm_pw_hint">Confirm Password</string>
     <string name="log_in">Log In</string>
+    <string name="log_in_email">Log In with Email</string>
     <string name="log_in_google">Log In with Google</string>
     <string name="create_account">Create Account</string>
     <string name="create_new_account">New? Register here!</string>

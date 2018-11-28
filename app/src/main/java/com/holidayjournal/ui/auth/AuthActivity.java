@@ -11,7 +11,8 @@ import com.holidayjournal.R;
 import com.holidayjournal.ui.base.BaseActivity;
 import com.holidayjournal.ui.holidays.HolidayActivity;
 
-public class AuthActivity extends BaseActivity implements LoginFragment.LoginListener, RegisterFragment.RegisterListener, ResetPasswordFragment.ResetPasswordListener {
+public class AuthActivity extends BaseActivity implements LoginFragment.LoginListener, EmailLoginFragment.EmailLoginListener,
+        RegisterFragment.RegisterListener, ResetPasswordFragment.ResetPasswordListener {
 
     private FirebaseAuth mAuth;
 
@@ -37,18 +38,34 @@ public class AuthActivity extends BaseActivity implements LoginFragment.LoginLis
 
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null) {
-            onLogIn();
+            onGoogleLogIn();
         }
     }
 
     @Override
-    public void onLogIn() {
+    public void onEmailLogIn() {
         showToast("Authentication successful!");
         startHolidayActivity();
     }
 
     @Override
-    public void onLogInError(String message) {
+    public void onEmailLogInError(String message) {
+        showToast(message);
+    }
+
+    @Override
+    public void startEmailLogIn() {
+        openNewFragment(new EmailLoginFragment());
+    }
+
+    @Override
+    public void onGoogleLogIn() {
+        showToast("Authentication successful!");
+        startHolidayActivity();
+    }
+
+    @Override
+    public void onGoogleLogInError(String message) {
         showToast(message);
     }
 
@@ -64,7 +81,7 @@ public class AuthActivity extends BaseActivity implements LoginFragment.LoginLis
     }
 
     @Override
-    public void registerError(String message) {
+    public void OnUserRegisterError(String message) {
         showToast(message);
     }
 

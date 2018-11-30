@@ -33,6 +33,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/button_round_corners"
+                android:foreground="?android:attr/selectableItemBackground"
                 android:text="@string/log_in_email"
                 android:textAllCaps="false"
                 android:textSize="15sp"
@@ -44,6 +45,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:background="@drawable/google_button"
+                android:foreground="?android:attr/selectableItemBackground"
                 android:gravity="center">
 
                 <ImageView
@@ -69,8 +71,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
                 android:background="@null"
+                android:foreground="?android:attr/selectableItemBackground"
                 android:text="@string/create_new_account"
-                android:textAllCaps="false" />
+                android:textAllCaps="false"
+                android:textSize="15sp" />
 
         </LinearLayout>
 

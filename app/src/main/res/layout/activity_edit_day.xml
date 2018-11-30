@@ -116,6 +116,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|center_horizontal"
             android:background="@drawable/button_round_corners"
+            android:foreground="?android:attr/selectableItemBackground"
             android:text="@string/save"
             android:textAllCaps="false"
             android:textSize="15sp"

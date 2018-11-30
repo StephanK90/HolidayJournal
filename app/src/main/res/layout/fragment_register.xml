@@ -83,6 +83,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="40dp"
                 android:background="@drawable/button_round_corners"
+                android:foreground="?android:attr/selectableItemBackground"
                 android:text="@string/create_account"
                 android:textAllCaps="false"
                 android:textSize="15sp"

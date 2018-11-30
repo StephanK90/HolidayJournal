@@ -66,6 +66,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="40dp"
                 android:background="@drawable/button_round_corners"
+                android:foreground="?android:attr/selectableItemBackground"
                 android:text="@string/log_in"
                 android:textAllCaps="false"
                 android:textSize="15sp"
@@ -77,8 +78,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
                 android:background="@null"
+                android:foreground="?android:attr/selectableItemBackground"
                 android:text="@string/forgot_pw"
-                android:textAllCaps="false" />
+                android:textAllCaps="false"
+                android:textSize="15sp" />
 
         </LinearLayout>
 

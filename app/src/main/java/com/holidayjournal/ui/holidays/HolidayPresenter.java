@@ -14,11 +14,16 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.holidayjournal.utils.Constants;
 import com.holidayjournal.models.HolidayModel;
+import com.holidayjournal.utils.DateFormatter;
 import com.holidayjournal.utils.Utils;
+
+import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 
 class HolidayPresenter {
 
     private HolidayView mView;
+    private DateTime nextHolidayDate;
 
     HolidayPresenter(HolidayView view) {
         this.mView = view;
@@ -48,15 +53,18 @@ class HolidayPresenter {
                                 HolidayModel holiday = document.toObject(HolidayModel.class);
                                 holiday.setId(document.getId());
 
-                                String imageName = document.getString(Constants.IMAGE_NAME);
+                                String imageName = holiday.getImageName();
                                 if (!TextUtils.isEmpty(imageName)) {
                                     getHolidayImage(holiday);
 
                                 } else {
                                     mView.onDownloadHolidaySuccess(holiday);
                                 }
+
+                                checkNextHolidayDate(holiday.getStartDate());
                             }
 
+                            returnNextHolidayDate();
                         }
                     });
         }
@@ -134,6 +142,24 @@ class HolidayPresenter {
                         mView.onError("Failed to delete holiday image.");
                     }
                 });
+    }
+
+    private void checkNextHolidayDate(long date) {
+        DateTime startDate = DateFormatter.toDate(date);
+
+        if (nextHolidayDate == null && startDate.toLocalDate().isAfter(LocalDate.now())) {
+            nextHolidayDate = startDate;
+
+        } else if (nextHolidayDate != null && startDate.toLocalDate().isAfter(LocalDate.now())
+                && startDate.toLocalDate().isBefore(nextHolidayDate.toLocalDate())) {
+            nextHolidayDate = startDate;
+        }
+    }
+
+    private void returnNextHolidayDate() {
+        if (nextHolidayDate != null) {
+            mView.onNextHolidayDate(nextHolidayDate.getMillis());
+        }
     }
 
 }

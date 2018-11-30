@@ -11,6 +11,8 @@ interface HolidayView {
 
     void noHolidays();
 
+    void onNextHolidayDate(long nextHolidayDate);
+
     void onError(String message);
 
 }

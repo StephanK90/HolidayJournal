@@ -62,7 +62,7 @@ public class HolidayActivity extends BaseActivity implements HolidayView, View.O
 
         registerBroadcastReceiver();
 
-        setNotificationAlarm(System.currentTimeMillis() + 60000);
+        //setNotificationAlarm(System.currentTimeMillis() + 30000);
 
         mFab.setOnClickListener(this);
 
@@ -107,6 +107,11 @@ public class HolidayActivity extends BaseActivity implements HolidayView, View.O
         mRecyclerView.setVisibility(View.GONE);
         mEmptyScreen.setVisibility(View.VISIBLE);
         hideProgressBar();
+    }
+
+    @Override
+    public void onNextHolidayDate(long nextHolidayDate) {
+        setNotificationAlarm(nextHolidayDate);
     }
 
     public void deleteHoliday(HolidayModel holiday, int position) {

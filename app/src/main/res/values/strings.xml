@@ -28,9 +28,9 @@
     <string name="settings_toolbar_title">Settings</string>
 
     <string name="share">SHARE</string>
-    <string name="map">MAP</string>
-    <string name="edit">EDIT</string>
-    <string name="delete">DELETE</string>
+    <string name="map">Map</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
     <string name="save">Save</string>
 
     <string name="title_hint">Title</string>

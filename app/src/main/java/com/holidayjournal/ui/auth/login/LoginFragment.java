@@ -31,7 +31,7 @@ public class LoginFragment extends BaseFragment implements LoginView, View.OnCli
     ProgressBar mProgressBar;
 
     @BindView(R.id.email_login_btn)
-    Button mEmailLogIn;
+    LinearLayout mEmailLogIn;
 
     @BindView(R.id.google_sign_in_btn)
     LinearLayout mGoogleSignInBtn;

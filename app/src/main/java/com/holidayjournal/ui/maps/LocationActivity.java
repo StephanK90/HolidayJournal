@@ -113,7 +113,7 @@ public class LocationActivity extends BaseActivity implements OnMapReadyCallback
             List<Address> locations = geoCoder.getFromLocation(latLng.latitude, latLng.longitude, 1);
             address = locations.get(0);
             mMap.addMarker(new MarkerOptions().position(latLng).title(address.getLocality())).showInfoWindow();
-            mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+            mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -137,7 +137,7 @@ public class LocationActivity extends BaseActivity implements OnMapReadyCallback
                     public void onSuccess(Location location) {
                         if (location != null) {
                             LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10f));
+                            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10f));
                         }
                     }
                 });
@@ -180,12 +180,9 @@ public class LocationActivity extends BaseActivity implements OnMapReadyCallback
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
-        switch (requestCode) {
-            case LOCATION_REQ_ID: {
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    zoomToUserLocation();
-                }
-                break;
+        if (requestCode == LOCATION_REQ_ID) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                zoomToUserLocation();
             }
         }
     }

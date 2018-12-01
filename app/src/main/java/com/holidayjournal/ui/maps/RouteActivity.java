@@ -21,14 +21,18 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.holidayjournal.R;
+import com.holidayjournal.models.DayModel;
 import com.holidayjournal.models.HolidayModel;
 import com.holidayjournal.models.LocationModel;
 import com.holidayjournal.ui.base.BaseActivity;
 import com.holidayjournal.utils.Constants;
+
+import java.util.ArrayList;
 
 import butterknife.BindView;
 
@@ -41,6 +45,8 @@ public class RouteActivity extends BaseActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
     private HolidayModel holiday;
+    private ArrayList<LocationModel> locations;
+    private LatLngBounds.Builder boundsBuilder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,29 +94,18 @@ public class RouteActivity extends BaseActivity implements OnMapReadyCallback {
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        addMapStyle();
+        applyMapStyle();
 
-        if (holiday != null) {
-            for (int i = 0; i < holiday.getDays().size(); i++) {
-                LocationModel firstLocation = holiday.getDays().get(i).getLocation();
-                if (firstLocation != null) {
-                    addMarker(firstLocation);
+        getLocations();
 
-                    if ((i != (holiday.getDays().size() - 1)) && holiday.getDays().get(i + 1).getLocation() != null) {
-                        LocationModel nextLocation = holiday.getDays().get(i + 1).getLocation();
-                        LatLng first = new LatLng(firstLocation.getLatitude(), firstLocation.getLongitude());
-                        LatLng next = new LatLng(nextLocation.getLatitude(), nextLocation.getLongitude());
-                        drawLine(first, next);
-                    }
-                }
-            }
-            if (holiday.getDays().get(0).getLocation() != null) {
-                zoomToFirstLocation(holiday.getDays().get(0).getLocation());
-            }
+        if (!locations.isEmpty()) {
+            boundsBuilder = new LatLngBounds.Builder();
+            addLocationsToMap();
+            zoomToRoute();
         }
     }
 
-    private void addMapStyle() {
+    private void applyMapStyle() {
         try {
             boolean success = mMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.map_style));
             if (!success) {
@@ -121,9 +116,29 @@ public class RouteActivity extends BaseActivity implements OnMapReadyCallback {
         }
     }
 
-    private void addMarker(LocationModel location) {
-        LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-        mMap.addMarker(new MarkerOptions().position(latLng)).setTitle(location.getName());
+    private void getLocations() {
+        locations = new ArrayList<>();
+
+        for (DayModel day : holiday.getDays()) {
+            LocationModel location = day.getLocation();
+
+            if (location != null) {
+                locations.add(location);
+            }
+        }
+    }
+
+    private void addLocationsToMap() {
+        for (int i = 0; i < locations.size(); i++) {
+            LatLng latLngOne = new LatLng(locations.get(i).getLatitude(), locations.get(i).getLongitude());
+            mMap.addMarker(new MarkerOptions().position(latLngOne)).setTitle(locations.get(i).getName());
+            boundsBuilder.include(latLngOne);
+
+            if (i != locations.size() - 1) {
+                LatLng latLngTwo = new LatLng(locations.get(i + 1).getLatitude(), locations.get(i + 1).getLongitude());
+                drawLine(latLngOne, latLngTwo);
+            }
+        }
     }
 
     private void drawLine(LatLng first, LatLng second) {
@@ -133,9 +148,10 @@ public class RouteActivity extends BaseActivity implements OnMapReadyCallback {
         mMap.addPolyline(line);
     }
 
-    private void zoomToFirstLocation(LocationModel firstLocation) {
-        LatLng latLng = new LatLng(firstLocation.getLatitude(), firstLocation.getLongitude());
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 5f));
+    private void zoomToRoute() {
+        LatLngBounds bounds = boundsBuilder.build();
+        int padding = 100;
+        mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, padding));
     }
 
     private void shareRouteMap() {
@@ -170,12 +186,9 @@ public class RouteActivity extends BaseActivity implements OnMapReadyCallback {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
-        switch (requestCode) {
-            case STORAGE_REQ_ID: {
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    shareRouteMap();
-                }
-                break;
+        if (requestCode == STORAGE_REQ_ID) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                shareRouteMap();
             }
         }
     }

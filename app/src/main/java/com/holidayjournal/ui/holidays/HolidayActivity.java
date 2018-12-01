@@ -16,6 +16,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -38,7 +39,7 @@ public class HolidayActivity extends BaseActivity implements HolidayView, View.O
     RecyclerView mRecyclerView;
 
     @BindView(R.id.holiday_empty_screen)
-    TextView mEmptyScreen;
+    LinearLayout mEmptyScreen;
 
     @BindView(R.id.holiday_fab)
     FloatingActionButton mFab;
@@ -64,10 +65,10 @@ public class HolidayActivity extends BaseActivity implements HolidayView, View.O
 
         //setNotificationAlarm(System.currentTimeMillis() + 30000);
 
-        mFab.setOnClickListener(this);
-
         mPresenter = new HolidayPresenter(this);
         mPresenter.getHolidays();
+
+        mFab.setOnClickListener(this);
     }
 
     @Override

@@ -69,7 +69,7 @@ public class AddHolidayActivity extends BaseActivity implements AddHolidayView, 
     private HolidayModel holiday;
     private Calendar myCalendar;
     private boolean isStartDate;
-    private boolean storagePermission;
+    //private boolean storagePermission;
     private Uri compressedImageUri;
 
     @Override
@@ -170,23 +170,30 @@ public class AddHolidayActivity extends BaseActivity implements AddHolidayView, 
         long startDate = DateFormatter.toLong(mStartDate.getText().toString());
         long endDate = DateFormatter.toLong(mEndDate.getText().toString());
 
-        if (holiday == null) {
-            holiday = new HolidayModel(mTitle.getText().toString(), startDate, endDate);
+        if (isEdit) {
+            editHoliday(startDate, endDate);
+
         } else {
-            holiday.setTitle(mTitle.getText().toString());
-            holiday.setStartDate(startDate);
-            holiday.setEndDate(endDate);
+            holiday = new HolidayModel(mTitle.getText().toString(), startDate, endDate);
+            holiday.setDescription(mDesc.getText().toString());
+            if (compressedImageUri != null) {
+                holiday.setImageName(compressedImageUri.getLastPathSegment());
+            }
+
+            mPresenter.addHoliday(holiday, compressedImageUri);
         }
+    }
+
+    private void editHoliday(long startDate, long endDate) {
+        holiday.setTitle(mTitle.getText().toString());
+        holiday.setStartDate(startDate);
+        holiday.setEndDate(endDate);
         holiday.setDescription(mDesc.getText().toString());
         if (compressedImageUri != null) {
             holiday.setImageName(compressedImageUri.getLastPathSegment());
         }
 
-        if (isEdit) {
-            mPresenter.editHoliday(holiday, compressedImageUri);
-        } else {
-            mPresenter.addHoliday(holiday, compressedImageUri);
-        }
+        mPresenter.editHoliday(holiday, compressedImageUri);
     }
 
     @Override
@@ -297,7 +304,7 @@ public class AddHolidayActivity extends BaseActivity implements AddHolidayView, 
                     Manifest.permission.READ_EXTERNAL_STORAGE}, STORAGE_REQ_ID);
 
         } else {
-            storagePermission = true;
+            //storagePermission = true;
             openImageChooser();
         }
     }
@@ -307,7 +314,7 @@ public class AddHolidayActivity extends BaseActivity implements AddHolidayView, 
         switch (requestCode) {
             case STORAGE_REQ_ID: {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    storagePermission = true;
+                    //storagePermission = true;
                     openImageChooser();
                 }
                 break;

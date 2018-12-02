@@ -83,7 +83,11 @@ public class HolidayAdapter extends RecyclerView.Adapter<HolidayAdapter.HolidayV
             } else {
                 holder.rating.setBackground(mContext.getResources().getDrawable(R.drawable.textview_rounded_green));
             }
-            holder.rating.setText(String.valueOf(holiday.getRating()));
+            if (holiday.getRating() == 10) {
+                holder.rating.setText("10");
+            } else {
+                holder.rating.setText(String.valueOf(holiday.getRating()));
+            }
         }
 
         String startDate = DateFormatter.toString(holiday.getStartDate());

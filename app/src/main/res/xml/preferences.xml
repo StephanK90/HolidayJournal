@@ -5,11 +5,13 @@
         android:key="pref_account_settings"
         android:title="Account Settings">
 
+        <!--
         <Preference
             android:icon="@drawable/ic_delete_forever_black_36dp"
             android:key="@string/pref_delete_data"
             android:summary="Deletes all your saved data"
             android:title="Delete Saved Data" />
+         -->
 
         <Preference
             android:icon="@drawable/ic_person_black_36dp"

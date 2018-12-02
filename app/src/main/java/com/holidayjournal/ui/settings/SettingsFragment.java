@@ -17,7 +17,7 @@ public class SettingsFragment extends PreferenceFragment {
     public void onCreatePreferences(Bundle bundle, String s) {
         addPreferencesFromResource(R.xml.preferences);
 
-        deleteDataPref();
+        //deleteDataPref();
         deleteUserPref();
     }
 

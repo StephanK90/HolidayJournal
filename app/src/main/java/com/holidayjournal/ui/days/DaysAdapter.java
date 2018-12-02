@@ -87,7 +87,9 @@ public class DaysAdapter extends RecyclerView.Adapter<DaysAdapter.DaysViewHolder
                 holder.rating.setText(String.valueOf(day.getRating()));
             }
 
-            holder.location.setText(day.getLocation().getName());
+            if (day.getLocation() != null) {
+                holder.location.setText(day.getLocation().getName());
+            }
         }
 
 
